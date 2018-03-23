@@ -1,9 +1,19 @@
 # Nextras/Orm -Console command
+
+## Configuration
 Using [Kdyby\Console](https://github.com/Kdyby/Console), don´t forget to config file
 
+Nette neon config example:
+```neon
+console:
+    commands:
+        - Barbarossa42\NextrasOrmCommand\CreateOrmCommand
+```
+
+## Usage
 `create:orm article Articles\Article articles`
 
-will genereate 3 files in folder Article (into specific directory):
+will generate 3 files in folder Article (into specific directory):
 
 **Article.php**
 ```php
@@ -56,7 +66,7 @@ class ArticleMapper extends Mapper
 
 [3] table name (optional) 
 
-## Config constans
+## Config constants
 You can setup your custom extends Parents. For Example custom entity:
 
 ```php

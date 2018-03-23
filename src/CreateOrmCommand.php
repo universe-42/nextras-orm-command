@@ -1,5 +1,5 @@
 <?php
-namespace App\Console;
+namespace Barbarossa42\NextrasOrmCommand;
 
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\Utils\Strings;
@@ -54,7 +54,6 @@ class CreateOrmCommand extends Command
         file_put_contents("$dir/$this->name.php", $this->getEntity());
         file_put_contents("$dir/$this->name" . "Repository.php", $this->getRepository());
         file_put_contents("$dir/$this->name" . "Mapper.php", $this->getMapper());
-        //file_put_contents("$dir/ModelTest.php", $this->getModel());
 
         $output->writeLn('Orm directory created successfully');
         return 0;
@@ -102,14 +101,4 @@ class CreateOrmCommand extends Command
 
         return (string) "<?php " . PHP_EOL . $namespace;
     }
-
-    /*public function getModel()
-    {
-        $namespace = new PhpNamespace("App\Orm");
-
-        $class = ClassType::from(Model::class);
-        $class->addComment('@property-read App\Orm\\' . $this->namespace . '\SurveyRepository $surveys');
-
-        return (string) "<?php " . PHP_EOL . $namespace;
-    }*/
 }
