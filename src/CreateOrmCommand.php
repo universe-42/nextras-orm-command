@@ -49,7 +49,9 @@ class CreateOrmCommand extends Command
 
         $dir = self::ORM_DIR . $dirName;
         if(is_dir($dir)) $dir .= '-2';
-        mkdir($dir);
+        if(mkdir($dir) === FALSE){
+            throw new \Exception("Cannot create directory $dir");
+        }
 
         file_put_contents("$dir/$this->name.php", $this->getEntity());
         file_put_contents("$dir/$this->name" . "Repository.php", $this->getRepository());
