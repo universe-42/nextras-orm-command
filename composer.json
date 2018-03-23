@@ -1,5 +1,5 @@
 {
-  "name": "Barbarossa42/nextras-orm-command",
+  "name": "barbarossa42/nextras-orm-command",
   "type": "library",
   "description": "Console command for Nextras/ORM",
   "keywords": ["nextras","orm", "command"],
