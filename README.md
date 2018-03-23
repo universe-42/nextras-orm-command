@@ -1,10 +1,14 @@
 # Nextras/Orm -Console command
 
+```
+composer require barbarossa42/nextras-orm-command
+```
+
 ## Configuration
 Using [Kdyby\Console](https://github.com/Kdyby/Console), don´t forget to config file
 
 Nette neon config example:
-```neon
+```yml
 console:
     commands:
         - Barbarossa42\NextrasOrmCommand\CreateOrmCommand
