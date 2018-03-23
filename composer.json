@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "OSD\\Markdown\\": "src/"
+      "Barbarossa42\\NextrasOrmCommand\\": "src/"
     }
   }
 }
