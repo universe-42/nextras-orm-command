@@ -1,6 +1,10 @@
 <?php
-namespace Barbarossa42\NextrasOrmCommand;
 
+declare(strict_types=1);
+
+namespace App\Model\Commands;
+
+use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Command\Command;
@@ -15,9 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CreateOrmCommand extends Command
 {
-    const ORM_DIR = __DIR__ . '/../orm/';
+    const ORM_DIR = __DIR__ . '/../Orm/';
 
-    const NS_DEFAULT = 'App\Orm';
+    const NS_DEFAULT = 'App\Model\Orm';
 
     const NS_ENTITY = 'Nextras\Orm\Entity\Entity';
 
@@ -25,21 +29,25 @@ class CreateOrmCommand extends Command
 
     const NS_MAPPER = 'Nextras\Orm\Mapper\Mapper';
 
-    private $name = '';
+    protected static $defaultName = 'create:orm';
 
-    private $namespace = '';
+    private string $name = '';
 
-    private $table = '';
+    private string $namespace = '';
 
-    protected function configure()
+    private string $table = '';
+
+    protected function configure(): void
     {
-        $this->setName('create:orm');
-        $this->addArgument('name', InputArgument::REQUIRED, 'name of class');
-        $this->addArgument('namespace', InputArgument::OPTIONAL, 'namespace');
-        $this->addArgument('table', InputArgument::OPTIONAL, 'name of table');
+        $this->addArgument('name', InputArgument::REQUIRED, 'name of class')
+            ->addArgument('namespace', InputArgument::OPTIONAL, 'namespace')
+            ->addArgument('table', InputArgument::OPTIONAL, 'name of table');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @throws \Exception
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument('name');
         $dirName = $name;
@@ -61,9 +69,12 @@ class CreateOrmCommand extends Command
         return 0;
     }
 
-    public function getEntity()
+    public function getEntity(): string
     {
-        $namespace = new PhpNamespace(self::NS_DEFAULT . "\\$this->namespace");
+        $file = new PhpFile();
+        $file->setStrictTypes();
+
+        $namespace = $file->addNamespace(self::NS_DEFAULT . "\\$this->namespace");
         $namespace->addUse(self::NS_ENTITY);
 
         $class = $namespace->addClass($this->name);
@@ -71,12 +82,15 @@ class CreateOrmCommand extends Command
             ->addComment("$this->name Entity class")
             ->addComment('@property int $id {primary}');
 
-        return (string) "<?php " . PHP_EOL . $namespace;
+        return (string) $file;
     }
 
-    public function getRepository()
+    public function getRepository(): string
     {
-        $namespace = new PhpNamespace(self::NS_DEFAULT . "\\$this->namespace");
+        $file = new PhpFile();
+        $file->setStrictTypes();
+
+        $namespace = $file->addNamespace(self::NS_DEFAULT . "\\$this->namespace");
         $namespace->addUse(self::NS_REPOSITORY);
 
         $class = $namespace->addClass($this->name . 'Repository');
@@ -87,12 +101,15 @@ class CreateOrmCommand extends Command
             ->setStatic()
             ->setBody("return [$this->name::class];");
 
-        return (string) "<?php " . PHP_EOL . $namespace;
+        return (string) $file;
     }
 
-    public function getMapper()
+    public function getMapper(): string
     {
-        $namespace = new PhpNamespace(self::NS_DEFAULT . "\\$this->namespace");
+        $file = new PhpFile();
+        $file->setStrictTypes();
+
+        $namespace = $file->addNamespace(self::NS_DEFAULT . "\\$this->namespace");
         $namespace->addUse(self::NS_MAPPER);
 
         $class = $namespace->addClass($this->name . 'Mapper');
@@ -101,6 +118,6 @@ class CreateOrmCommand extends Command
         $class->addProperty('tableName', $this->table)
             ->setVisibility('protected');
 
-        return (string) "<?php " . PHP_EOL . $namespace;
+        return (string) $file;
     }
 }
